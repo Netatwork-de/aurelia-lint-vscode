@@ -13,6 +13,20 @@
 	"activationEvents": [
 		"onStartupFinished"
 	],
+	"contributes": {
+		"configuration": [
+			{
+				"title": "Aurelia Lint",
+				"properties": {
+					"nawAureliaLint.onlyCurrentFiles": {
+						"type": "boolean",
+						"default": false,
+						"description": "Only lint files that are currently open"
+					}
+				}
+			}
+		]
+	},
 	"main": "./out/index.js",
 	"scripts": {
 		"clean": "rimraf ./out/**/*",

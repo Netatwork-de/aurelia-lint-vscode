@@ -12,9 +12,6 @@ export function activate(context: ExtensionContext): void {
 		{
 			module: serverModule,
 			transport: TransportKind.ipc,
-			options: {
-				// execArgv: ["--nolazy", "--inspect=6009"],
-			},
 		},
 		{
 			documentSelector: [
