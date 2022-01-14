@@ -22,6 +22,11 @@
 						"type": "boolean",
 						"default": false,
 						"description": "Only lint files that are currently open"
+					},
+					"nawAureliaLint.ignorePaths": {
+						"type": "string",
+						"default": "**/node_modules",
+						"description": "Paths to ignore when looking for aurelia lint projects separated by \"|\""
 					}
 				}
 			}
