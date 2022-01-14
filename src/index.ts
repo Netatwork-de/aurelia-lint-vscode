@@ -5,6 +5,7 @@ import { LanguageClient, TransportKind } from "vscode-languageclient/node";
 import { PackageLocator } from "./package-locator";
 import { Settings } from "./settings";
 import { inspect } from "util";
+import { isAbsolute } from "path";
 
 interface State {
 	readonly client: LanguageClient;
@@ -31,7 +32,9 @@ export async function activate() {
 		const packageName = settings.packageName ?? "@netatwork/aurelia-lint";
 		const range = "1.x";
 
-		const serverLocation = await new PackageLocator(packageName, range).locate();
+		const serverLocation: PackageLocator.Location | null = isAbsolute(packageName)
+			? { dirname: packageName, version: "1.0.0" }
+			: await new PackageLocator(packageName, range).locate();
 
 		if (state !== null) {
 			if (serverLocation?.version === state.serverVersion) {

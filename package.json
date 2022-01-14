@@ -31,7 +31,7 @@
 					"nawAureliaLint.packageName": {
 						"type": "string",
 						"default": "@netatwork/aurelia-lint",
-						"description": "The package to load the language server from"
+						"description": "The package to load the language server from or an absolute path"
 					}
 				}
 			}
