@@ -27,6 +27,11 @@
 						"type": "string",
 						"default": "**/node_modules",
 						"description": "Paths to ignore when looking for aurelia lint projects separated by \"|\""
+					},
+					"nawAureliaLint.packageName": {
+						"type": "string",
+						"default": "@netatwork/aurelia-lint",
+						"description": "The package to load the language server from"
 					}
 				}
 			}
@@ -40,11 +45,17 @@
 	},
 	"devDependencies": {
 		"@types/node": "^17.0.8",
+		"@types/p-limit": "^2.2.0",
+		"@types/resolve": "^1.20.1",
+		"@types/semver": "^7.3.9",
 		"@types/vscode": "^1.63.1",
 		"rimraf": "^3.0.2",
 		"typescript": "^4.5.4"
 	},
 	"dependencies": {
+		"p-limit": "^3.1.0",
+		"resolve": "^1.21.0",
+		"semver": "^7.3.5",
 		"vscode-languageclient": "^7.0.0"
 	},
 	"repository": "https://github.com/Netatwork-de/aurelia-lint-vscode.git",
