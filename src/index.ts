@@ -55,7 +55,7 @@ export async function activate() {
 			let serverModule: string;
 			try {
 				serverModule = await new Promise<string>((resolve, reject) => {
-					resolveModule(`${packageName}/dist/language-server`, { basedir: serverLocation.dirname }, (error, filename) => {
+					resolveModule((isAbsolute(packageName) ? "." : packageName) + `/dist/language-server`, { basedir: serverLocation.dirname }, (error, filename) => {
 						if (error) {
 							reject(error);
 						} else {
