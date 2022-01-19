@@ -42,6 +42,7 @@
 		"clean": "rimraf ./out/**/*",
 		"build": "tsc",
 		"watch": "tsc -w",
+		"vscode:prepublish": "npm run build",
 		"package": "vsce package",
 		"publish": "vsce publish"
 	},
