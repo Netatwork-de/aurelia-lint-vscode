@@ -83,6 +83,12 @@ export async function activate() {
 								language: "html",
 							},
 						],
+						synchronize: {
+							fileEvents: [
+								workspace.createFileSystemWatcher("**/aurelia-lint.json5"),
+								workspace.createFileSystemWatcher("**/*.{ts,js}"),
+							],
+						},
 					},
 				),
 			};
