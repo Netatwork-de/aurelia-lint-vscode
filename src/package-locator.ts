@@ -1,7 +1,7 @@
-import { readFile } from "fs/promises";
-import { workspace } from "vscode";
+import { access, readFile } from "fs/promises";
+import { OutputChannel, workspace } from "vscode";
 import semver from "semver";
-import { dirname } from "path";
+import { dirname, join } from "path";
 
 interface PackageLock {
 	dependencies: Record<string, {
@@ -10,12 +10,16 @@ interface PackageLock {
 }
 
 export class PackageLocator {
+	private readonly _output: OutputChannel;
 	private readonly _name: string;
 	private readonly _range: string;
+	private readonly _entryPath: string;
 
-	public constructor(name: string, range: string) {
+	public constructor(output: OutputChannel, name: string, range: string, entryPath: string) {
+		this._output = output;
 		this._name = name;
 		this._range = range;
+		this._entryPath = entryPath;
 	}
 
 	public async locate(): Promise<PackageLocator.Location | null> {
@@ -23,22 +27,28 @@ export class PackageLocator {
 
 		let location: PackageLocator.Location | null = null;
 
-		for (const uri of packageLocks) {
-			const filename = uri.fsPath;
+		await Promise.all(packageLocks.map(async uri => {
+			const packageLock = uri.fsPath;
+			const context = dirname(packageLock);
 
-			const info = JSON.parse(await readFile(filename, "utf-8")) as PackageLock;
+			const info = JSON.parse(await readFile(packageLock, "utf-8")) as PackageLock;
 			const version = info.dependencies?.[this._name]?.version;
 			if (version) {
-				if (semver.satisfies(version, this._range)) {
-					if (location === null || semver.gt(version, location.version)) {
-						location = {
-							dirname: dirname(filename),
-							version,
-						};
-					}
+				const entryModule = join(context, "node_modules", this._name, this._entryPath);
+				if (await access(entryModule).then(() => true, () => false)
+					&& semver.satisfies(version, this._range)
+					&& (location === null || semver.gt(version, location.version))
+				) {
+					location = {
+						context,
+						entryModule,
+						version,
+					};
+				} else {
+					this._output.appendLine(`Ignoring package ${this._name} (${version}) in ${context} because it is not installed.`);
 				}
 			}
-		}
+		}));
 
 		return location;
 	}
@@ -46,7 +56,8 @@ export class PackageLocator {
 
 export declare namespace PackageLocator {
 	export interface Location {
-		dirname: string;
+		context: string;
+		entryModule: string;
 		version: string;
 	}
 }
