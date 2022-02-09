@@ -1,7 +1,7 @@
 {
 	"name": "aurelia-lint-vscode",
 	"displayName": "Aurelia Lint",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"description": "Aurelia lint extension for vscode",
 	"publisher": "NetatWorkGmbH",
 	"private": true,
