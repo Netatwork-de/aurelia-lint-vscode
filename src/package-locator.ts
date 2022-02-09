@@ -35,15 +35,14 @@ export class PackageLocator {
 			const version = info.dependencies?.[this._name]?.version;
 			if (version) {
 				const entryModule = join(context, "node_modules", this._name, this._entryPath);
-				if (await access(entryModule).then(() => true, () => false)
-					&& semver.satisfies(version, this._range)
-					&& (location === null || semver.gt(version, location.version))
-				) {
-					location = {
-						context,
-						entryModule,
-						version,
-					};
+				if (await access(entryModule).then(() => true, () => false)) {
+					if (semver.satisfies(version, this._range) && (location === null || semver.gt(version, location.version))) {
+						location = {
+							context,
+							entryModule,
+							version,
+						};
+					}
 				} else {
 					this._output.appendLine(`Ignoring package ${this._name} (${version}) in ${context} because it is not installed.`);
 				}
